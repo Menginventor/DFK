@@ -18,18 +18,16 @@ config = [DELTA_ALPHA,ROD_RADIUS,ROD_LENGTH];
 Z_MAX_LENGTH = 300;
 
 %actuator
-q = [50;75;100];
+syms q1 q2 q3;
+q = [q1;q2;q3];
+%q = [50;75;100];
+
 [p_e,p1,p2,p3,plane_hmat] = DFK2(q,config,Z_MAX_LENGTH);
 %visualize
 hold on;
 axis equal
 
 
-plot_tower(p1,p2,p3,Z_MAX_LENGTH);
-plot_cariage(p1,p2,p3);
-plotFrame(eye(4),20);
-plotFrame(plane_hmat,20);
-plotEndeffector(p1,p2,p3,p_e)
 
 
 %recheck

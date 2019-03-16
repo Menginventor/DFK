@@ -18,7 +18,8 @@ config = [DELTA_ALPHA,ROD_RADIUS,ROD_LENGTH];
 Z_MAX_LENGTH = 300;
 
 %actuator
-ceps = 1e-12;
+%ceps = 1e-12;
+cesp = eps;
 hold on;
 axis equal
 
@@ -27,14 +28,16 @@ plot_tower(p1,p2,p3,Z_MAX_LENGTH);
 
 plotFrame(eye(4),20);
 
-
+iterate = 0;
 for q1 = 0:10:100
     for q2 = 0:10:100
         for q3 = 0:10:100
+            disp(iterate);
+            iterate = iterate+1;
             q = [q1;q2;q3];
-            [p_e,p1,p2,p3] = DFK(q,config,Z_MAX_LENGTH);
-            scatter3(p_e(1),p_e(2),p_e(3));
-            plotEndeffector(p1,p2,p3,p_e)
+            [p_e,p1,p2,p3] = DFK2(q,config,Z_MAX_LENGTH);
+            %scatter3(p_e(1),p_e(2),p_e(3));
+            %plotEndeffector(p1,p2,p3,p_e)
             if (norm(p_e-p1)- ROD_LENGTH_A>ceps )
                 disp('error p1');
                 disp(q);
@@ -49,14 +52,14 @@ for q1 = 0:10:100
             elseif  (norm(p_e-p3)-ROD_LENGTH_C>ceps)
                 disp('error p3');
                 disp(q);
-                disp(norm(p_e-p3)-ROD_LENGTH_C)
-                disp(eps)
+                disp(norm(p_e-p3)-ROD_LENGTH_C);
+                disp(eps);
  
             
             end
             if isnan(p_e)
-                disp('nan')
-                disp(q)
+                disp('nan');
+                disp(q);
             end
         end
     end

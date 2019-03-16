@@ -79,15 +79,15 @@ end
 
 
 function show(q,config,Z_MAX_LENGTH)
-            [p_e,p1,p2,p3] = DFK(q,config,Z_MAX_LENGTH);
+            [p_e,p1,p2,p3,h] = DFK2(q,config,Z_MAX_LENGTH);
             %scatter3(p_e(1),p_e(2),p_e(3));
-            %plotEndeffector(p1,p2,p3,p_e);
-            h1 = plot_line(p1,p_e);
-            h2 = plot_line(p2,p_e);
-            h3 = plot_line(p3,p_e);  
+            
+           
+            h4 = plotEndeffector(p1,p2,p3,p_e);
+            h5 = plotFrame(h,20);
             pause(0.01);
-            delete(h1)
-            delete(h2)
-            delete(h3)
+         
+            delete(h4)
+            delete(h5)
 end
 

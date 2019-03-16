@@ -1,4 +1,4 @@
-function [p_e,p1,p2,p3] = DFK_sym(q,config,Z_MAX_LENGTH)
+function [p_e,p1,p2,p3,plane_hmat] = DFK2(q,config,Z_MAX_LENGTH)
     %configuration
     
     DELTA_ALPHA = config(:,1);
@@ -27,19 +27,19 @@ function [p_e,p1,p2,p3] = DFK_sym(q,config,Z_MAX_LENGTH)
 
     %creat plane plane_eq = [a;b;c],plane_const = d
     %ax+by+cz+d = 0
-    plane_eq = cross(p2-p1,p3-p1);
+    plane_vec = cross(p2-p1,p3-p1);
 
-    plane_const = -dot(plane_eq,p1);
+    plane_const = -dot(plane_vec,p1);
 
     %prepare data to create transformation
-    plane_center = [0;0;-plane_const/plane_eq(3)];
+    plane_center = [0;0;-plane_const/plane_vec(3)];
     
-    plane_z_rot_ang = acos(plane_eq(3)/norm(plane_eq));
-
-    plane_z_rot_axis = normalize(cross([0;0;1],plane_eq));
-        
-    plane_rmat = rot_axis(plane_z_rot_axis,plane_z_rot_ang);
-
+    plane_z_axis = plane_vec./noem(plane_vec);
+    plane_y_axis = (p3-plane_center)./norm((p3-plane_center));
+    plane_x_axis = cross(plane_y_axis,plane_z_axis);
+    
+    plane_rmat = [plane_x_axis.';plane_y_axis.';plane_z_axis];
+   
     %create homogeneous transformation matrix
     plane_hmat = [[plane_rmat;[0,0,0]],[plane_center;1]];
 
@@ -72,7 +72,7 @@ function [p_e,p1,p2,p3] = DFK_sym(q,config,Z_MAX_LENGTH)
     k_e = cof_e\const_e;
     pp_ce = pp12+v12_c*k_e(1);
     %calculate enfeffector in plane
-    pp_eh = -sqrt(ROD_LENGTH_A^2-norm(pp_ce-pp1)^2);
+    pp_eh = sqrt(ROD_LENGTH_A^2-norm(pp_ce-pp1)^2);
 
     pp_e = [pp_ce(1:2);pp_eh];
 
@@ -94,5 +94,21 @@ function Rz = rot_z(theta)
 c = cos(theta);
 s = sin(theta);
 Rz = [c -s 0;s c 0;0 0 1];
+
+end
+function Rx = rot_x(theta)
+
+
+c = cos(theta);
+s = sin(theta);
+Rx = [1 0 0;0 c -s;0 s c];
+
+end
+function Ry = rot_y(theta)
+
+
+c = cos(theta);
+s = sin(theta);
+Ry = [c 0 s;0 1 0;-s 0 c;];
 
 end

@@ -18,7 +18,10 @@ config = [DELTA_ALPHA,ROD_RADIUS,ROD_LENGTH];
 Z_MAX_LENGTH = 300;
 
 %actuator
+syms q1 q2 q3;
+q 
 q = [50;75;100];
+
 [p_e,p1,p2,p3,plane_hmat] = DFK2(q,config,Z_MAX_LENGTH);
 %visualize
 hold on;
