@@ -1,4 +1,4 @@
-function [p_e,p1,p2,p3,plane_hmat] = DFK2(q,config,Z_MAX_LENGTH)
+function [p_e,p1,p2,p3,plane_hmat] = DFK3(q,config,Z_MAX_LENGTH)
     %configuration
     
     DELTA_ALPHA = config(:,1);
@@ -42,12 +42,11 @@ function [p_e,p1,p2,p3,plane_hmat] = DFK2(q,config,Z_MAX_LENGTH)
    
     %create homogeneous transformation matrix
     plane_hmat = [[plane_rmat;[0,0,0]],[plane_center;1]];
-    %disp(plane_hmat);
+
     %transform p1,p2,p3
     h_p1 = plane_hmat\[p1;1];
     h_p2 = plane_hmat\[p2;1];
     h_p3 = plane_hmat\[p3;1];
-
     pp1 = h_p1(1:3);
     pp2 = h_p2(1:3);
     pp3 = h_p3(1:3);
@@ -72,7 +71,6 @@ function [p_e,p1,p2,p3,plane_hmat] = DFK2(q,config,Z_MAX_LENGTH)
     const_e = pp13(1:2)-pp12(1:2);
     k_e = cof_e\const_e;
     pp_ce = pp12+v12_c*k_e(1);
-    %disp(pp_ce);
     %calculate enfeffector in plane
     pp_eh = -sqrt(ROD_LENGTH_A^2-norm(pp_ce-pp1)^2);
 

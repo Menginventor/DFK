@@ -18,15 +18,13 @@ config = [DELTA_ALPHA,ROD_RADIUS,ROD_LENGTH];
 Z_MAX_LENGTH = 300;
 
 %actuator
-%ceps = 1e-12;
-cesp = eps;
+ceps = 1e-13;
+%ceps = eps;
 hold on;
 axis equal
 
 
-plot_tower(p1,p2,p3,Z_MAX_LENGTH);
 
-plotFrame(eye(4),20);
 
 iterate = 0;
 for q1 = 0:10:100
